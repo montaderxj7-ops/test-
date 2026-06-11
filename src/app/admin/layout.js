@@ -16,25 +16,14 @@ export default function AdminLayout({ children }) {
 
   const isLoginRoute = pathname === "/admin/login";
 
-  if (isLoginRoute) {
-    return (
-      <AdminGuard>
-        <style>{`
-          * { cursor: auto !important; }
-          a, button, [role="button"], label, .cursor-pointer { cursor: pointer !important; }
-          input, textarea { cursor: text !important; }
-        `}</style>
-        {children}
-      </AdminGuard>
-    );
-  }
-
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const notifRef = useRef(null);
 
   useEffect(() => {
+    if (isLoginRoute) return; // Don't subscribe on login page
+    
     const channel = supabase.channel('bookings-channel')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'bookings' }, (payload) => {
         const newBooking = payload.new;
@@ -70,12 +59,27 @@ export default function AdminLayout({ children }) {
       supabase.removeChannel(channel);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [isLoginRoute]);
 
   const markAllAsRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
     setUnreadCount(0);
   };
+
+  if (isLoginRoute) {
+    return (
+      <AdminGuard>
+        <style>{`
+          * { cursor: auto !important; }
+          a, button, [role="button"], label, .cursor-pointer { cursor: pointer !important; }
+          input, textarea { cursor: text !important; }
+        `}</style>
+        {children}
+      </AdminGuard>
+    );
+  }
+
+
 
   const navLinks = [
     { href: "/admin", icon: <LayoutDashboard size={20} strokeWidth={1.5} />, label: "الرئيسية" },
