@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  html[dir="rtl"] {
+    font-family: var(--font-cairo), sans-serif;
+  }
+  html[dir="ltr"] {
+    font-family: var(--font-inter), sans-serif;
+  }
+
+  /* Hide cursor globally only on devices that support hover */
+  @media (hover: hover) and (pointer: fine) {
+    * {
+      cursor: none !important;
+    }
+  }
+
+  body {
+    @apply bg-background text-text antialiased overflow-x-hidden;
+  }
+}
+
+@layer components {
+  /* High-End 3D Glossy Button based on the design request */
+  .btn-3d {
+    @apply relative inline-flex items-center justify-center gap-3 px-6 py-3 rounded-full font-bold uppercase tracking-wider text-black overflow-hidden transition-all duration-300;
+    background: linear-gradient(180deg, #e3c483 0%, #C5A059 100%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 
+      0px 10px 20px -5px rgba(197, 160, 89, 0.5), /* outer glow */
+      inset 0px 3px 4px rgba(255, 255, 255, 0.8), /* top highlight */
+      inset 0px -4px 8px rgba(0, 0, 0, 0.25); /* bottom depth */
+  }
+
+  .btn-3d::before {
+    content: '';
+    @apply absolute top-0 left-1/4 right-1/4 h-1/3 rounded-full pointer-events-none;
+    background: linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 100%);
+  }
+
+  .btn-3d:hover {
+    @apply -translate-y-1;
+    box-shadow: 
+      0px 15px 25px -5px rgba(197, 160, 89, 0.7),
+      inset 0px 3px 4px rgba(255, 255, 255, 0.9),
+      inset 0px -4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-3d:active {
+    @apply translate-y-1;
+    box-shadow: 
+      0px 5px 10px -2px rgba(197, 160, 89, 0.4),
+      inset 0px 1px 2px rgba(255, 255, 255, 0.4),
+      inset 0px -2px 4px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Secondary 3D Button (Dark/Glass) */
+  .btn-3d-glass {
+    @apply relative inline-flex items-center justify-center gap-3 px-6 py-3 rounded-full font-bold uppercase tracking-wider text-white overflow-hidden transition-all duration-300;
+    background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.5) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+      0px 10px 20px -5px rgba(0, 0, 0, 0.5),
+      inset 0px 2px 3px rgba(255, 255, 255, 0.3),
+      inset 0px -4px 8px rgba(0, 0, 0, 0.5);
+  }
+
+  .btn-3d-glass::before {
+    content: '';
+    @apply absolute top-0 left-1/4 right-1/4 h-1/3 rounded-full pointer-events-none;
+    background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+  }
+
+  .btn-3d-glass:hover {
+    @apply -translate-y-1 bg-white/10;
+    box-shadow: 
+      0px 15px 25px -5px rgba(0, 0, 0, 0.7),
+      inset 0px 2px 3px rgba(255, 255, 255, 0.4);
+  }
+
+  /* Icon wrapper inside 3D button */
+  .btn-icon {
+    @apply flex items-center justify-center w-8 h-8 rounded-full;
+    background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(200,200,200,0.2) 100%);
+    box-shadow: 
+      inset 0px 2px 4px rgba(255,255,255,1),
+      0px 2px 4px rgba(0,0,0,0.3);
+    color: #111;
+  }
+
+  /* Custom 3D Swiper Slide */
+  .swiper-slide-custom {
+    width: 350px !important;
+    height: 500px !important;
+    transform-style: preserve-3d;
+  }
+
+  @media (max-width: 768px) {
+    .swiper-slide-custom {
+      width: 280px !important;
+      height: 450px !important;
+    }
+  }
+
+  .swiper-pagination-bullet {
+    background: var(--color-primary, #C5A059) !important;
+    opacity: 0.5;
+  }
+  .swiper-pagination-bullet-active {
+    opacity: 1;
+    transform: scale(1.5);
+    transition: transform 0.3s;
+  }
+}
