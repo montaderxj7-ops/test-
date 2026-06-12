@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { motion } from "framer-motion";
-import { CarFront, Lock, Mail, ArrowLeft } from "lucide-react";
+import { Lock, Mail, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
@@ -51,8 +52,8 @@ export default function AdminLoginPage() {
           <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
           
           <div className="flex flex-col items-center mb-10">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#1a1a1a] to-black border border-white/5 flex items-center justify-center text-primary mb-4 shadow-[0_0_30px_rgba(197,160,89,0.2)]">
-              <CarFront size={32} />
+            <div className="mb-6 flex justify-center p-4 bg-[#0a0a0a] rounded-2xl border border-white/5 shadow-[0_0_30px_rgba(197,160,89,0.15)]">
+              <Image src="/logo.png" alt="GTA Basra" width={140} height={60} className="object-contain h-12 w-auto" />
             </div>
             <h1 className="text-3xl font-bold text-white mb-2">تسجيل الدخول</h1>
             <p className="text-white/50 text-sm">مرحباً بك في لوحة تحكم إدارة GTA</p>
