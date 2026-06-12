@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import AdminGuard from "@/components/AdminGuard";
-import { LayoutDashboard, CalendarDays, Image as ImageIcon, LogOut, CarFront, Settings, Bell, Wrench, ShieldCheck, Check } from "lucide-react";
+import { LayoutDashboard, CalendarDays, Image as ImageIcon, LogOut, CarFront, Settings, Bell, Wrench, ShieldCheck, Check, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
@@ -19,7 +19,34 @@ export default function AdminLayout({ children }) {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [toast, setToast] = useState(null);
   const notifRef = useRef(null);
+
+  const playNotificationSound = () => {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, ctx.currentTime); // A5
+      osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.1);
+      
+      gainNode.gain.setValueAtTime(0, ctx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.05);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+      
+      osc.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      
+      osc.start();
+      osc.stop(ctx.currentTime + 0.5);
+    } catch (e) {
+      console.error("Audio play failed:", e);
+    }
+  };
 
   useEffect(() => {
     if (isLoginRoute) return; // Don't subscribe on login page
@@ -34,6 +61,19 @@ export default function AdminLayout({ children }) {
           read: false
         }, ...prev]);
         setUnreadCount(prev => prev + 1);
+        
+        // Play sound
+        playNotificationSound();
+
+        // Show visual toast
+        setToast({
+          id: Date.now(),
+          title: 'حجز جديد! 🎉',
+          message: `تم استلام حجز من ${newBooking.customer_name} لخدمة ${newBooking.service_requested}`
+        });
+
+        // Hide toast after 5 seconds
+        setTimeout(() => setToast(null), 5000);
         
         if (Notification.permission === "granted") {
           new Notification("حجز جديد!", {
@@ -267,6 +307,33 @@ export default function AdminLayout({ children }) {
             </motion.div>
           </div>
         </main>
+
+        {/* Global Toast Notification */}
+        <AnimatePresence>
+          {toast && (
+            <motion.div
+              initial={{ opacity: 0, y: 50, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 50, scale: 0.9 }}
+              className="fixed bottom-8 left-8 z-[99999] bg-[#111] border border-primary/30 shadow-[0_0_30px_rgba(197,160,89,0.2)] rounded-2xl p-5 flex items-start gap-4 max-w-sm"
+              dir="rtl"
+            >
+              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center shrink-0 text-primary border border-primary/30">
+                <Bell size={20} strokeWidth={2} className="animate-pulse" />
+              </div>
+              <div>
+                <h4 className="text-white font-bold mb-1">{toast.title}</h4>
+                <p className="text-white/70 text-sm leading-relaxed">{toast.message}</p>
+              </div>
+              <button 
+                onClick={() => setToast(null)}
+                className="absolute top-4 left-4 text-white/40 hover:text-white"
+              >
+                <X size={16} />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </AdminGuard>
   );
