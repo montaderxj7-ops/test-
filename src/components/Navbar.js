@@ -31,8 +31,8 @@ export default function Navbar() {
     setMobileMenuOpen(false);
   }, [pathname]);
 
-  const navItems = ['الرئيسية', 'من نحن', 'خدماتنا', 'معرض الأعمال', 'التحقق من الضمان'];
-  const paths = ['/#hero', '/#about', '/#services', '/#portfolio', '/#warranty'];
+  const navItems = ['الرئيسية', 'من نحن', 'خدماتنا', 'معرض الأعمال', 'التحقق من الضمان', 'تواصل معنا'];
+  const paths = ['/#hero', '/#about', '/#services', '/#portfolio', '/#warranty', '/#contact'];
 
   if (pathname?.startsWith('/booking') || pathname?.startsWith('/admin') || pathname?.startsWith('/warranty')) return null;
 

@@ -87,6 +87,7 @@ export default function Footer() {
               <li><Link href="/#about" className="text-white/60 hover:text-primary transition-colors flex items-center gap-2 group"><span className="w-0 overflow-hidden group-hover:w-4 transition-all duration-300 text-primary opacity-0 group-hover:opacity-100">←</span> من نحن</Link></li>
               <li><Link href="/#portfolio" className="text-white/60 hover:text-primary transition-colors flex items-center gap-2 group"><span className="w-0 overflow-hidden group-hover:w-4 transition-all duration-300 text-primary opacity-0 group-hover:opacity-100">←</span> معرض الأعمال</Link></li>
               <li><Link href="/#warranty" className="text-white/60 hover:text-primary transition-colors flex items-center gap-2 group"><span className="w-0 overflow-hidden group-hover:w-4 transition-all duration-300 text-primary opacity-0 group-hover:opacity-100">←</span> التحقق من الضمان</Link></li>
+              <li><Link href="/#contact" className="text-white/60 hover:text-primary transition-colors flex items-center gap-2 group"><span className="w-0 overflow-hidden group-hover:w-4 transition-all duration-300 text-primary opacity-0 group-hover:opacity-100">←</span> تواصل معنا</Link></li>
             </ul>
           </div>
 
