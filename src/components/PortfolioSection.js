@@ -7,32 +7,44 @@ import { X, Play, Maximize2, Sparkles } from 'lucide-react';
 import Tilt from 'react-parallax-tilt';
 import { supabase } from '@/lib/supabase';
 
-const categories = ['الكل', 'حماية PPF', 'نانو سيراميك', 'تلميع ساطع', 'غسيل VIP', 'عازل حراري'];
 
 export default function PortfolioSection() {
   const [activeCategory, setActiveCategory] = useState('الكل');
   const [selectedItem, setSelectedItem] = useState(null);
   const [portfolioItems, setPortfolioItems] = useState([]);
+  const [categories, setCategories] = useState(['الكل']);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchItems() {
+    async function fetchData() {
       if (!supabase) { setLoading(false); return; }
       try {
-        const { data, error } = await supabase
+        const { data: servicesData, error: servicesError } = await supabase
+          .from("services")
+          .select("name")
+          .eq("is_active", true)
+          .order("created_at", { ascending: true });
+        
+        if (servicesError) throw servicesError;
+
+        if (servicesData) {
+          setCategories(['الكل', ...servicesData.map(s => s.name)]);
+        }
+
+        const { data: portfolioData, error: portfolioError } = await supabase
           .from('portfolio_items')
           .select('*')
           .order('created_at', { ascending: false });
         
-        if (error) throw error;
-        setPortfolioItems(data || []);
+        if (portfolioError) throw portfolioError;
+        setPortfolioItems(portfolioData || []);
       } catch (error) {
-        console.error('Error fetching portfolio items:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     }
-    fetchItems();
+    fetchData();
   }, []);
 
   const filteredItems = portfolioItems.filter(item => 

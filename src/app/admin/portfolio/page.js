@@ -6,10 +6,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Image as ImageIcon, Plus, Trash2, X, Upload, Video } from "lucide-react";
 import Image from "next/image";
 
-const CATEGORIES = ['حماية PPF', 'نانو سيراميك', 'تلميع ساطع', 'غسيل VIP', 'عازل حراري'];
-
 export default function AdminPortfolioPage() {
   const [items, setItems] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -18,29 +17,46 @@ export default function AdminPortfolioPage() {
   // Form State
   const [formData, setFormData] = useState({
     title: "",
-    category: CATEGORIES[0],
+    category: "",
     type: "image",
     file: null,
   });
   const [previewUrl, setPreviewUrl] = useState(null);
 
   useEffect(() => {
-    fetchPortfolioItems();
+    fetchData();
   }, []);
 
-  const fetchPortfolioItems = async () => {
+  const fetchData = async () => {
     setLoading(true);
     if (!supabase) return;
     try {
-      const { data, error } = await supabase
+      // Fetch services for categories
+      const { data: servicesData, error: servicesError } = await supabase
+        .from("services")
+        .select("name")
+        .eq("is_active", true)
+        .order("created_at", { ascending: true });
+      
+      if (servicesError) throw servicesError;
+      
+      const fetchedCategories = servicesData ? servicesData.map(s => s.name) : [];
+      setCategories(fetchedCategories);
+      
+      if (fetchedCategories.length > 0) {
+        setFormData(prev => ({ ...prev, category: fetchedCategories[0] }));
+      }
+
+      // Fetch portfolio items
+      const { data: portfolioData, error: portfolioError } = await supabase
         .from("portfolio_items")
         .select("*")
         .order("created_at", { ascending: false });
       
-      if (error) throw error;
-      setItems(data || []);
+      if (portfolioError) throw portfolioError;
+      setItems(portfolioData || []);
     } catch (error) {
-      console.error("Error fetching portfolio items:", error);
+      console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
@@ -137,7 +153,7 @@ export default function AdminPortfolioPage() {
   };
 
   const resetForm = () => {
-    setFormData({ title: "", category: CATEGORIES[0], type: "image", file: null });
+    setFormData({ title: "", category: categories.length > 0 ? categories[0] : "", type: "image", file: null });
     if (previewUrl) URL.revokeObjectURL(previewUrl);
     setPreviewUrl(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
@@ -303,7 +319,7 @@ export default function AdminPortfolioPage() {
                     onChange={(e) => setFormData({...formData, category: e.target.value})}
                     className="w-full bg-[#050505] border border-white/5 rounded-2xl py-4 px-5 text-white focus:outline-none focus:border-white/20 transition-all appearance-none font-medium"
                   >
-                    {CATEGORIES.map(cat => (
+                    {categories.map(cat => (
                       <option key={cat} value={cat}>{cat}</option>
                     ))}
                   </select>
