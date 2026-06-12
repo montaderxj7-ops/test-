@@ -22,7 +22,7 @@ export default function Footer() {
   if (pathname?.startsWith('/booking') || pathname?.startsWith('/admin') || pathname?.startsWith('/warranty')) return null;
 
   return (
-    <footer className="bg-[#050505] pt-24 pb-12 relative z-10 overflow-hidden border-t border-white/5">
+    <footer id="contact" className="bg-[#050505] pt-24 pb-12 relative z-10 overflow-hidden border-t border-white/5">
       {/* Background Orbs */}
       <div className="absolute top-0 right-1/3 w-[30rem] h-[30rem] bg-primary/5 rounded-full blur-[150px] pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-[#00f2fe]/5 rounded-full blur-[150px] pointer-events-none"></div>

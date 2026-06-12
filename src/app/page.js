@@ -11,7 +11,6 @@ import { useRef, useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import PortfolioSection from '@/components/PortfolioSection';
 import WarrantySection from '@/components/WarrantySection';
-import ContactSection from '@/components/ContactSection';
 import { useAuth } from '@/context/AuthContext';
 
 import 'swiper/css';
@@ -307,9 +306,6 @@ export default function HomePage() {
 
       {/* 5. Warranty Check Section */}
       <WarrantySection />
-
-      {/* 6. Contact Section */}
-      <ContactSection />
     </main>
   );
 }
