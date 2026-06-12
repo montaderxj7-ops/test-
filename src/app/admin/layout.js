@@ -311,8 +311,8 @@ export default function AdminLayout({ children }) {
                 </AnimatePresence>
               </div>
               
-              <div className="bg-[#0a0a0a] p-2 px-6 rounded-full border border-white/10 flex items-center justify-center">
-                <Image src="/logo.png" alt="GTA Basra Logo" width={140} height={50} className="object-contain h-12 w-auto" />
+              <div className="flex items-center justify-center mr-4">
+                <Image src="/logo.png" alt="GTA Basra Logo" width={180} height={70} className="object-contain h-16 w-auto drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" />
               </div>
             </div>
           </header>
