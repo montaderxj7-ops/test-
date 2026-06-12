@@ -13,7 +13,7 @@ const InstagramIcon = ({ size = 24, className = "" }) => (
 );
 
 export default function Footer() {
-  const { openAuthModal } = useAuth();
+  const { handleBookingClick } = useAuth();
   const mapLink = "https://maps.app.goo.gl/KfGqYfQ4oZSbPhZx6";
   const facebookLink = "https://www.facebook.com/people/gtabasra/61554675607343/?ref=xav_pl_fb_external_link_android";
   const instagramLink = "https://www.instagram.com/gtabasra?igsh=czZ5bjNpenQxYW9z";
@@ -35,7 +35,7 @@ export default function Footer() {
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">هل سيارتك جاهزة <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-[#dfc07b]">للتألق؟</span></h2>
             <p className="text-white/50 text-lg font-light">دعنا نمنحها العناية الملكية التي تستحقها على أيدي خبرائنا.</p>
           </div>
-          <button onClick={openAuthModal} className="btn-3d text-lg px-8 py-4 flex items-center gap-3 interactive shrink-0">
+          <button onClick={handleBookingClick} className="btn-3d text-lg px-8 py-4 flex items-center gap-3 interactive shrink-0">
             احجز موعدك الآن <ArrowUpRight size={20} />
           </button>
         </div>

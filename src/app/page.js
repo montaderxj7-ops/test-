@@ -41,7 +41,7 @@ const scaleUp = {
 };
 
 export default function HomePage() {
-  const { openAuthModal } = useAuth();
+  const { handleBookingClick } = useAuth();
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -214,7 +214,7 @@ export default function HomePage() {
               </div>
               
               <motion.div variants={slideInRight}>
-                <button onClick={openAuthModal} className="btn-3d text-lg px-8 py-3 interactive inline-flex">
+                <button onClick={handleBookingClick} className="btn-3d text-lg px-8 py-3 interactive inline-flex">
                   <span className="btn-icon"><Star size={18} /></span>
                   احجز موعدك الآن
                 </button>

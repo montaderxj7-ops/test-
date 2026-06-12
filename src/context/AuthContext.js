@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import AuthModal from '@/components/AuthModal';
+import { useRouter } from 'next/navigation';
 
 const AuthContext = createContext({});
 
@@ -39,6 +40,15 @@ export function AuthProvider({ children }) {
 
   const openAuthModal = () => setIsAuthModalOpen(true);
   const closeAuthModal = () => setIsAuthModalOpen(false);
+  const router = useRouter();
+  
+  const handleBookingClick = () => {
+    if (user) {
+      router.push('/booking');
+    } else {
+      setIsAuthModalOpen(true);
+    }
+  };
   
   const logout = async () => {
     try {
@@ -55,6 +65,7 @@ export function AuthProvider({ children }) {
       isAuthModalOpen, 
       openAuthModal, 
       closeAuthModal,
+      handleBookingClick,
       user,
       loadingUser,
       logout

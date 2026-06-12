@@ -12,7 +12,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { openAuthModal } = useAuth();
+  const { handleBookingClick } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,7 +71,7 @@ export default function Navbar() {
 
             {/* CTA Button */}
             <div className="hidden md:flex items-center">
-              <button onClick={openAuthModal} className="btn-3d px-6 py-2.5 text-sm interactive">
+              <button onClick={handleBookingClick} className="btn-3d px-6 py-2.5 text-sm interactive">
                 <span className="btn-icon"><Star size={16} /></span>
                 احجز موعدك
               </button>
@@ -104,7 +104,7 @@ export default function Navbar() {
                   </Link>
                 );
             })}
-            <button onClick={() => { setMobileMenuOpen(false); openAuthModal(); }} className="btn-3d mt-8 w-full py-4 text-xl">احجز موعدك الآن</button>
+            <button onClick={() => { setMobileMenuOpen(false); handleBookingClick(); }} className="btn-3d mt-8 w-full py-4 text-xl">احجز موعدك الآن</button>
           </motion.div>
         )}
       </AnimatePresence>
