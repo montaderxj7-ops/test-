@@ -131,13 +131,10 @@ export default function AdminDashboardPage() {
               className={`p-1.5 rounded-[2rem] ${card.dark ? 'bg-gradient-to-b from-white/10 to-transparent' : 'bg-[#0a0a0a] border border-white/5'}`}
             >
               <div className={`h-full rounded-[1.625rem] p-6 flex flex-col justify-between ${card.dark ? 'bg-[#050505] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]' : 'bg-[#0a0a0a]'}`}>
-                <div className="flex justify-between items-start mb-6">
+                <div className="flex justify-start items-start mb-6">
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center ${card.dark ? 'bg-primary text-black' : 'bg-white/5 text-white/70 border border-white/10'}`}>
                     {card.icon}
                   </div>
-                  <button className="text-white/30 hover:text-white transition-colors">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-                  </button>
                 </div>
                 <div>
                   <p className="text-white/50 text-sm font-medium mb-1">{card.title}</p>
