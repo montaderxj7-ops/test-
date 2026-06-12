@@ -51,38 +51,58 @@ export default function AdminLayout({ children }) {
   useEffect(() => {
     if (isLoginRoute) return; // Don't subscribe on login page
     
-    const channel = supabase.channel('bookings-channel')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'bookings' }, (payload) => {
-        const newBooking = payload.new;
-        setNotifications(prev => [{
-          id: newBooking.id,
-          message: `حجز جديد من ${newBooking.customer_name}`,
-          time: new Date().toLocaleTimeString('ar-IQ', { hour: '2-digit', minute: '2-digit' }),
-          read: false
-        }, ...prev]);
-        setUnreadCount(prev => prev + 1);
-        
-        // Play sound
-        playNotificationSound();
+    let lastChecked = new Date().toISOString();
 
-        // Show visual toast
-        setToast({
-          id: Date.now(),
-          title: 'حجز جديد! 🎉',
-          message: `تم استلام حجز من ${newBooking.customer_name} لخدمة ${newBooking.service_requested}`
-        });
-
-        // Hide toast after 5 seconds
-        setTimeout(() => setToast(null), 5000);
+    const checkNewBookings = async () => {
+      if (!supabase) return;
+      try {
+        const { data, error } = await supabase
+          .from('bookings')
+          .select('*')
+          .gt('created_at', lastChecked)
+          .order('created_at', { ascending: true });
         
-        if (Notification.permission === "granted") {
-          new Notification("حجز جديد!", {
-            body: `حجز جديد للخدمة: ${newBooking.service_requested}\nالعميل: ${newBooking.customer_name}`,
-            icon: "/favicon.ico"
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          lastChecked = data[data.length - 1].created_at;
+
+          data.forEach(newBooking => {
+            setNotifications(prev => [{
+              id: newBooking.id,
+              message: `حجز جديد من ${newBooking.customer_name}`,
+              time: new Date().toLocaleTimeString('ar-IQ', { hour: '2-digit', minute: '2-digit' }),
+              read: false
+            }, ...prev]);
+            setUnreadCount(prev => prev + 1);
+            
+            // Show visual toast
+            setToast({
+              id: Date.now() + Math.random(),
+              title: 'حجز جديد! 🎉',
+              message: `تم استلام حجز من ${newBooking.customer_name} لخدمة ${newBooking.service_requested}`
+            });
+
+            // Hide toast after 5 seconds
+            setTimeout(() => setToast(null), 5000);
+            
+            if (Notification.permission === "granted") {
+              new Notification("حجز جديد!", {
+                body: `حجز جديد للخدمة: ${newBooking.service_requested}\nالعميل: ${newBooking.customer_name}`,
+                icon: "/favicon.ico"
+              });
+            }
           });
+
+          // Play sound once per batch
+          playNotificationSound();
         }
-      })
-      .subscribe();
+      } catch (err) {
+        console.error("Error polling bookings:", err);
+      }
+    };
+
+    const intervalId = setInterval(checkNewBookings, 5000);
 
     if ("Notification" in window) {
       Notification.requestPermission();
@@ -96,7 +116,7 @@ export default function AdminLayout({ children }) {
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      supabase.removeChannel(channel);
+      clearInterval(intervalId);
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isLoginRoute]);
