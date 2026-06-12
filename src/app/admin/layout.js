@@ -96,6 +96,9 @@ export default function AdminLayout({ children }) {
 
           // Play sound once per batch
           playNotificationSound();
+          
+          // Dispatch global event for other components to refresh
+          window.dispatchEvent(new Event('new_booking'));
         }
       } catch (err) {
         console.error("Error polling bookings:", err);

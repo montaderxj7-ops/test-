@@ -23,15 +23,14 @@ export default function AdminBookingsPage() {
     fetchServices();
 
     if (supabase) {
-      const channel = supabase
-        .channel('admin_bookings_page')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'bookings' }, () => {
-          fetchBookings();
-        })
-        .subscribe();
+      const handleNewBooking = () => {
+        fetchBookings();
+      };
+
+      window.addEventListener('new_booking', handleNewBooking);
 
       return () => {
-        supabase.removeChannel(channel);
+        window.removeEventListener('new_booking', handleNewBooking);
       };
     }
   }, []);

@@ -88,15 +88,14 @@ export default function AdminDashboardPage() {
     if (supabase) {
       fetchData();
       
-      const channel = supabase
-        .channel('dashboard_bookings')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'bookings' }, () => {
-          fetchData();
-        })
-        .subscribe();
+      const handleNewBooking = () => {
+        fetchData();
+      };
+      
+      window.addEventListener('new_booking', handleNewBooking);
 
       return () => {
-        supabase.removeChannel(channel);
+        window.removeEventListener('new_booking', handleNewBooking);
       };
     }
   }, []);
