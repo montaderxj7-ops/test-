@@ -52,8 +52,8 @@ export default function AdminLoginPage() {
           <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
           
           <div className="flex flex-col items-center mb-10">
-            <div className="mb-6 flex justify-center p-4 bg-[#0a0a0a] rounded-2xl border border-white/5 shadow-[0_0_30px_rgba(197,160,89,0.15)]">
-              <Image src="/logo.png" alt="GTA Basra" width={140} height={60} className="object-contain h-12 w-auto" />
+            <div className="mb-6 flex justify-center">
+              <Image src="/logo.png" alt="GTA Basra" width={240} height={100} className="object-contain h-24 w-auto drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" />
             </div>
             <h1 className="text-3xl font-bold text-white mb-2">تسجيل الدخول</h1>
             <p className="text-white/50 text-sm">مرحباً بك في لوحة تحكم إدارة GTA</p>
